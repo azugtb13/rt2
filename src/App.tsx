@@ -1,9 +1,26 @@
 import React, { useState } from 'react';
 import { Car, Calendar, MapPin, Crown, Shield, Trophy, Users, Clock } from 'lucide-react';
+import DatePicker from 'react-datepicker';
+import "react-datepicker/dist/react-datepicker.css";
+import { addDays } from 'date-fns';
 
 function App() {
   const [isReturn, setIsReturn] = useState(true);
   const [passengers, setPassengers] = useState(1);
+  const [departureDate, setDepartureDate] = useState<Date | null>(null);
+  const [returnDate, setReturnDate] = useState<Date | null>(null);
+
+  const handleDepartureDateChange = (date: Date | null) => {
+    setDepartureDate(date);
+    // If return date is before the new departure date, reset it
+    if (date && returnDate && returnDate < date) {
+      setReturnDate(null);
+    }
+  };
+
+  const handleReturnDateChange = (date: Date | null) => {
+    setReturnDate(date);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -11,7 +28,7 @@ function App() {
       <nav className="bg-white/95 backdrop-blur-sm fixed w-full z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center justify-center w-full md:w-auto">
               <Crown className="h-8 w-8 text-blue-600" />
               <span className="ml-2 text-xl font-semibold tracking-tight">ROYAL TRANSFER</span>
             </div>
@@ -50,51 +67,28 @@ function App() {
 
       {/* Search Section */}
       <div className="relative -mt-24">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl overflow-hidden">
-            {/* Trip Type and Passenger Controls */}
-            <div className="flex flex-col md:flex-row justify-between items-stretch">
-              <div className="flex">
-                <button
-                  className={`px-8 h-12 transition-colors rounded-tl-xl ${isReturn ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
-                  onClick={() => setIsReturn(true)}
-                >
-                  With return
-                </button>
-                <button
-                  className={`px-8 h-12 transition-colors ${!isReturn ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
-                  onClick={() => setIsReturn(false)}
-                >
-                  One Way
-                </button>
-              </div>
-              
-              <div className="flex items-center gap-3 bg-gray-50 rounded-tr-xl px-6 h-12">
-                <Users className="h-5 w-5 text-gray-400" />
-                <button
-                  className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-gray-200 active:bg-blue-600 active:text-white"
-                  onClick={() => setPassengers(Math.max(1, passengers - 1))}
-                >
-                  -
-                </button>
-                <div className="flex items-center whitespace-nowrap">
-                  <span className="font-medium">{passengers}</span>
-                  <span className="ml-1">Passenger{passengers !== 1 ? 's' : ''}</span>
-                </div>
-                <button
-                  className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-gray-200 active:bg-blue-600 active:text-white"
-                  onClick={() => setPassengers(passengers + 1)}
-                >
-                  +
-                </button>
-              </div>
+            {/* Trip Type */}
+            <div className="flex w-full md:w-auto">
+              <button
+                className={`flex-1 md:flex-initial md:px-8 h-12 transition-colors md:rounded-tl-xl ${isReturn ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
+                onClick={() => setIsReturn(true)}
+              >
+                With return
+              </button>
+              <button
+                className={`flex-1 md:flex-initial md:px-8 h-12 transition-colors ${!isReturn ? 'bg-blue-600 text-white' : 'bg-gray-50 text-gray-700 hover:bg-gray-100'}`}
+                onClick={() => setIsReturn(false)}
+              >
+                One Way
+              </button>
             </div>
 
             {/* Main Search Panel */}
             <div className="p-6">
-              {/* Search Fields */}
-              <div className="grid md:grid-cols-4 gap-4 mb-6">
-                <div className="relative">
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="relative flex-1">
                   <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <input
                     type="text"
@@ -103,7 +97,7 @@ function App() {
                   />
                 </div>
                 
-                <div className="relative">
+                <div className="relative flex-1">
                   <MapPin className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <input
                     type="text"
@@ -112,29 +106,53 @@ function App() {
                   />
                 </div>
 
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Departure"
-                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                <div className="relative flex-1">
+                  <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400 z-10" />
+                  <DatePicker
+                    selected={departureDate}
+                    onChange={handleDepartureDateChange}
+                    placeholderText="Departure"
+                    minDate={new Date()}
+                    dateFormat="MMM d, yyyy"
                   />
                 </div>
 
-                <div className="relative">
-                  <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Return"
-                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${!isReturn ? 'opacity-50' : ''}`}
+                <div className="relative flex-1">
+                  <Calendar className="absolute left-3 top-3 h-5 w-5 text-gray-400 z-10" />
+                  <DatePicker
+                    selected={returnDate}
+                    onChange={handleReturnDateChange}
+                    placeholderText="Return"
+                    minDate={departureDate || new Date()}
+                    dateFormat="MMM d, yyyy"
                     disabled={!isReturn}
+                    className={!isReturn ? 'opacity-50' : ''}
                   />
                 </div>
-              </div>
 
-              {/* Search Button */}
-              <div className="flex justify-center">
-                <button className="bg-blue-600 text-white px-12 py-4 rounded-lg hover:bg-blue-700 transition-colors text-lg font-semibold">
+                {/* Passenger Select */}
+                <div className="flex items-center gap-3 bg-gray-50 px-4 rounded-lg">
+                  <Users className="h-5 w-5 text-gray-400" />
+                  <button
+                    className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-gray-200 active:bg-blue-600 active:text-white"
+                    onClick={() => setPassengers(Math.max(1, passengers - 1))}
+                  >
+                    -
+                  </button>
+                  <div className="flex items-center whitespace-nowrap">
+                    <span className="font-medium">{passengers}</span>
+                    <span className="ml-1">Passenger{passengers !== 1 ? 's' : ''}</span>
+                  </div>
+                  <button
+                    className="w-8 h-8 flex items-center justify-center rounded-full transition-colors hover:bg-gray-200 active:bg-blue-600 active:text-white"
+                    onClick={() => setPassengers(passengers + 1)}
+                  >
+                    +
+                  </button>
+                </div>
+
+                {/* Search Button */}
+                <button className="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition-colors font-semibold whitespace-nowrap">
                   See Prices
                 </button>
               </div>
@@ -144,6 +162,7 @@ function App() {
 
         {/* Trust Indicators */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+          <hr className="border-gray-200 mb-16" />
           <div className="grid md:grid-cols-4 gap-8">
             <div className="flex items-center justify-center gap-3">
               <Users className="h-8 w-8 text-blue-600" />
@@ -175,6 +194,45 @@ function App() {
                 <h3 className="font-semibold">24/7 Support</h3>
                 <p className="text-sm text-gray-600">Always here to help</p>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Airport Travel Section */}
+      <div className="bg-[#dde1ea] py-24 mt-24">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-4xl font-bold text-center mb-16">Airport travel, simplified</h2>
+          
+          <div className="grid md:grid-cols-3 gap-16">
+            <div className="text-center">
+              <div className="flex justify-center mb-6">
+                <img src="https://connectotransfers.com/static/frontend_v2/images/icons/book_transfer.png" alt="Book a Ride" className="h-16 w-16" />
+              </div>
+              <h3 className="text-xl font-semibold text-blue-600 mb-3">Book a Ride</h3>
+              <p className="text-gray-600">
+                Receive instant confirmation. Adjust your plans without worry.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="flex justify-center mb-6">
+                <img src="https://connectotransfers.com/static/frontend_v2/images/icons/meeting_driver.png" alt="Meet Your Driver" className="h-16 w-16" />
+              </div>
+              <h3 className="text-xl font-semibold text-blue-600 mb-3">Meet Your Driver</h3>
+              <p className="text-gray-600">
+                Upon your arrival, you will be greeted and escorted to your vehicle. Rest assured, the driver will monitor your flight, ensuring a prompt pick-up even if there are delays.
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="flex justify-center mb-6">
+                <img src="https://connectotransfers.com/static/frontend_v2/images/icons/reach_destination.png" alt="Reach Your Destination" className="h-16 w-16" />
+              </div>
+              <h3 className="text-xl font-semibold text-blue-600 mb-3">Reach Your Destination</h3>
+              <p className="text-gray-600">
+                Your driver escorts you to your chosen spot, marking the beginning of your journey.
+              </p>
             </div>
           </div>
         </div>
