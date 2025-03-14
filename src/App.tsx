@@ -114,21 +114,10 @@ function App() {
                     placeholderText="Departure"
                     minDate={new Date()}
                     dateFormat="MMM d, yyyy"
-                    popperPlacement="bottom-start"
-                    popperModifiers={[
-                      {
-                        name: "offset",
-                        options: {
-                          offset: [0, 8]
-                        }
-                      },
-                      {
-                        name: "preventOverflow",
-                        options: {
-                          boundary: "viewport"
-                        }
-                      }
-                    ]}
+                    className="w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    popperClassName="datepicker-popper"
+                    popperPlacement="bottom"
+                    popperModifiers={[]}
                   />
                 </div>
 
@@ -141,22 +130,10 @@ function App() {
                     minDate={departureDate || new Date()}
                     dateFormat="MMM d, yyyy"
                     disabled={!isReturn}
-                    className={!isReturn ? 'opacity-50' : ''}
-                    popperPlacement="bottom-start"
-                    popperModifiers={[
-                      {
-                        name: "offset",
-                        options: {
-                          offset: [0, 8]
-                        }
-                      },
-                      {
-                        name: "preventOverflow",
-                        options: {
-                          boundary: "viewport"
-                        }
-                      }
-                    ]}
+                    className={`w-full pl-10 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${!isReturn ? 'opacity-50' : ''}`}
+                    popperClassName="datepicker-popper"
+                    popperPlacement="bottom"
+                    popperModifiers={[]}
                   />
                 </div>
 

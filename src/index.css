@@ -4,20 +4,23 @@
 
 .react-datepicker-wrapper {
   width: 100%;
+  position: relative;
 }
 
-.react-datepicker__input-container input {
+.react-datepicker__input-container {
   width: 100%;
-  padding: 0.75rem 2.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
-  outline: none;
-  transition: all 0.2s;
 }
 
-.react-datepicker__input-container input:focus {
-  border-color: #93c5fd;
-  box-shadow: 0 0 0 3px rgba(147, 197, 253, 0.25);
+.react-datepicker-popper {
+  position: absolute !important;
+  inset: 0px auto auto 0px !important;
+  transform: translate(0, 48px) !important;
+  z-index: 9999 !important;
+  margin-top: 0 !important;
+}
+
+.datepicker-popper {
+  z-index: 9999 !important;
 }
 
 .react-datepicker {
@@ -25,18 +28,12 @@
   border: 1px solid #e5e7eb;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  background-color: white;
+  margin-top: 8px;
 }
 
-.react-datepicker-popper {
-  z-index: 99999 !important;
-}
-
-.react-datepicker-popper[data-placement^='bottom'] {
-  padding-top: 5px;
-}
-
-.react-datepicker-popper[data-placement^='top'] {
-  padding-bottom: 5px;
+.react-datepicker__triangle {
+  display: none;
 }
 
 .react-datepicker__header {
@@ -44,19 +41,38 @@
   border-bottom: 1px solid #e5e7eb;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
+  padding-top: 0.5rem;
+}
+
+.react-datepicker__month {
+  margin: 0.4rem;
+}
+
+.react-datepicker__day-name {
+  color: #6b7280;
+  margin: 0.2rem;
+}
+
+.react-datepicker__day {
+  margin: 0.2rem;
+  border-radius: 0.25rem;
+  color: #374151;
+}
+
+.react-datepicker__day:hover {
+  background-color: #f3f4f6;
 }
 
 .react-datepicker__day--selected {
   background-color: #2563eb !important;
-  border-radius: 0.25rem;
+  color: white !important;
 }
 
 .react-datepicker__day--keyboard-selected {
-  background-color: #93c5fd !important;
-  border-radius: 0.25rem;
+  background-color: #93c5fd;
+  color: white;
 }
 
-.react-datepicker__day:hover {
-  background-color: #e5e7eb !important;
-  border-radius: 0.25rem;
+.react-datepicker__day--disabled {
+  color: #d1d5db;
 }
