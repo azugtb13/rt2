@@ -44,7 +44,7 @@ function App() {
 
       {/* Hero Section */}
       <div 
-        className="h-[60vh] relative flex items-center"
+        className="h-[60vh] relative flex items-center z-0"
         style={{
           backgroundImage: 'url(https://i.imgur.com/Y7GtfwS.jpeg)',
           backgroundSize: 'cover',
@@ -66,7 +66,7 @@ function App() {
       </div>
 
       {/* Search Section */}
-      <div className="relative -mt-24">
+      <div className="relative -mt-24 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-white rounded-2xl overflow-hidden">
             {/* Trip Type */}
@@ -114,6 +114,21 @@ function App() {
                     placeholderText="Departure"
                     minDate={new Date()}
                     dateFormat="MMM d, yyyy"
+                    popperPlacement="bottom-start"
+                    popperModifiers={[
+                      {
+                        name: "offset",
+                        options: {
+                          offset: [0, 8]
+                        }
+                      },
+                      {
+                        name: "preventOverflow",
+                        options: {
+                          boundary: "viewport"
+                        }
+                      }
+                    ]}
                   />
                 </div>
 
@@ -127,6 +142,21 @@ function App() {
                     dateFormat="MMM d, yyyy"
                     disabled={!isReturn}
                     className={!isReturn ? 'opacity-50' : ''}
+                    popperPlacement="bottom-start"
+                    popperModifiers={[
+                      {
+                        name: "offset",
+                        options: {
+                          offset: [0, 8]
+                        }
+                      },
+                      {
+                        name: "preventOverflow",
+                        options: {
+                          boundary: "viewport"
+                        }
+                      }
+                    ]}
                   />
                 </div>
 
